@@ -6,16 +6,18 @@ class Program
     static void Main()
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-
+        //Получаем количество и названия операций
         int operationsCount;
         do
         {
             Console.Write("Введите количество операций (2-40): ");
         } while (!int.TryParse(Console.ReadLine(), out operationsCount) || operationsCount < 2 || operationsCount > 40);
 
+        //Создаем 2 массива с порлученными данными (1 названия,1 количество)
         string[] names = new string[operationsCount];
         int[] amounts = new int[operationsCount];
 
+        //С помощью цикла добавляем в 2 массива данные
         for (int i = 0; i < operationsCount; i++)
         {
             while (true)
@@ -34,7 +36,13 @@ class Program
                 Console.WriteLine("Ошибка формата! Повторите ввод.");
             }
         }
-
+        //Выводим меню
+        menu(names, amounts);
+        
+    }
+    static void menu(string[] names, int[] amounts)
+    {
+        //Создаем меню и возможность выбрать числами пункт меню 
         bool exit = false;
         while (!exit)
         {
@@ -48,7 +56,7 @@ class Program
 
             Console.Write("Выберите пункт: ");
             string choice = Console.ReadLine();
-
+            
             switch (choice)
             {
                 case "1":
@@ -76,38 +84,40 @@ class Program
             }
         }
     }
-
+    //Добавляем возможность выводить список
     static void PrintData(string[] names, int[] amounts)
     {
         Console.WriteLine("\nСписок операций:");
+        //Создаем цикл для вывода
         for (int i = 0; i < names.Length; i++)
         {
             Console.WriteLine($"{names[i]}; {amounts[i]} руб.");
         }
     }
-
+    //Добавляем возможность выводить статистику
     static void ShowStatistics(int[] amounts)
     {
+        //Создаем первоначальные данные
         int sum = 0;
         int min = amounts[0];
         int max = amounts[0];
-
+        //Методом перебора находим данные
         foreach (int amount in amounts)
         {
             sum += amount;
             if (amount < min) min = amount;
             if (amount > max) max = amount;
         }
-
+        //Находим среднее
         double average = (double)sum / amounts.Length;
-
+        //Выводим данные
         Console.WriteLine("\nСтатистика:");
         Console.WriteLine($"Сумма: {sum} руб.");
         Console.WriteLine($"Среднее: {average:F2} руб.");
         Console.WriteLine($"Минимальная сумма: {min} руб.");
         Console.WriteLine($"Максимальная сумма: {max} руб.");
     }
-
+    //Делаем пузырьковую сортировку
     static void BubbleSort(string[] names, int[] amounts)
     {
         for (int i = 0; i < amounts.Length - 1; i++)
@@ -122,19 +132,20 @@ class Program
             }
         }
     }
-
+    //Делаем перевод валюты по курсу
     static void ConvertCurrency(int[] amounts)
     {
+        //Запрашиваем данные
         Console.WriteLine("\nДоступные валюты:");
         Console.WriteLine("1. Доллар (USD)");
         Console.WriteLine("2. Евро (EUR)");
         Console.WriteLine("3. Юань (CNY)");
         Console.Write("Выберите валюту или введите свой курс: ");
-
+        //Создаем первоначальные данные
         double rate;
         string currencySymbol;
         string input = Console.ReadLine();
-
+        //Делаем возможность выбора
         switch (input)
         {
             case "1":
@@ -158,7 +169,7 @@ class Program
                 currencySymbol = "иностранная валюта";
                 break;
         }
-
+        //Выводим данные
         Console.WriteLine($"\nКонвертация по курсу {rate} руб./{currencySymbol}:");
         for (int i = 0; i < amounts.Length; i++)
         {
@@ -166,12 +177,13 @@ class Program
             Console.WriteLine($"{amounts[i]} руб. = {converted:F2} {currencySymbol}");
         }
     }
-
+    //Создаем поиск по имени
     static void SearchByName(string[] names, int[] amounts)
     {
+        //Запрашиваем данные
         Console.Write("Введите название для поиска: ");
         string searchTerm = Console.ReadLine().ToLower();
-
+        //С помощью цикла находим совпадения и выводим ответ
         bool found = false;
         for (int i = 0; i < names.Length; i++)
         {
