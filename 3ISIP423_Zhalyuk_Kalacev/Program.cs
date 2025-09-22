@@ -59,7 +59,6 @@ namespace ShopInventory
         public void AddProduct(string name, decimal price, int quantity, Category category)
         {
             var product = new Product(name, price, quantity, category);
-            product.GetType().GetProperty("Id")?.SetValue(product, _nextId++.ToString());
             _products.Add(product);
         }
         public bool RemoveProduct(string id)
