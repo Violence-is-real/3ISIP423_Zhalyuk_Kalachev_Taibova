@@ -99,6 +99,33 @@ namespace ShopInventory
         {
             return _products.Where(p => p.Category == category);
         }
+        public void AddTestData()
+        {
+            AddProduct("Ноутбук", 50000, 10, Category.Электроника);
+            AddProduct("Футболка", 1500, 50, Category.Одежда);
+            AddProduct("Яблоки", 100, 200, Category.Продукты);
+            AddProduct("Наушники", 3000, 30, Category.Электроника);
+            AddProduct("Джинсы", 2500, 40, Category.Одежда);
+        }
     }
-}
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var manager = new ProductManager();
+            manager.AddTestData();
+
+            while (true)
+            {
+                Console.WriteLine("\n1. Добавить товар");
+                Console.WriteLine("2. Удалить товар");
+                Console.WriteLine("3. Заказать поставку");
+                Console.WriteLine("4. Продать товар");
+                Console.WriteLine("5. Поиск товара");
+                Console.WriteLine("6. Выход");
+                Console.Write("Выберите действие: ");
+            }
+        }
+    }
+    }
 
