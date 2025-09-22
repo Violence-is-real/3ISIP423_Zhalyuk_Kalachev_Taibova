@@ -10,7 +10,7 @@ namespace ShopInventory
         Одежда,
         Продукты
     }
-public class Product
+    public class Product
     {
         public string Id { get; }
         public string Name { get; }
@@ -46,6 +46,21 @@ public class Product
                 throw new InvalidOperationException("Недостаточно товара на складе.");
             Quantity -= amount;
         }
-
+        public override string ToString()
+        {
+            return $"Код: {Id} | Название: {Name} | Цена: {Price:C} | Количество: {Quantity} | Наличие: {(IsAvailable ? "Да" : "Нет")} | Категория: {Category}";
+        }
+    }
+    public class ProductManager
+    {
+        private List _products = new List();
+        private int _nextId = 1;
+        public void AddProduct(string name, decimal price, int quantity, Category category)
+        {
+            var product = new Product(name, price, quantity, category);
+            product.GetType().GetProperty("Id")?.SetValue(product, _nextId++.ToString());
+            _products.Add(product);
+        }
     }
 }
+
