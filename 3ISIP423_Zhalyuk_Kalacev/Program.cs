@@ -38,5 +38,14 @@ public class Product
                 throw new ArgumentException("Количество должно быть положительным.");
             Quantity += amount;
         }
+        public void DecreaseQuantity(int amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Количество должно быть положительным.");
+            if (Quantity < amount)
+                throw new InvalidOperationException("Недостаточно товара на складе.");
+            Quantity -= amount;
+        }
+
     }
 }
