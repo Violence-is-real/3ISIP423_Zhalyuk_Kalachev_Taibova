@@ -32,5 +32,11 @@ public class Product
             Quantity = quantity;
             Category = category;
         }
+        public void IncreaseQuantity(int amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Количество должно быть положительным.");
+            Quantity += amount;
+        }
     }
 }
