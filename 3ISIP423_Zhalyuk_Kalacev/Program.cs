@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,13 +54,50 @@ namespace ShopInventory
     }
     public class ProductManager
     {
-        private List _products = new List();
+        private List<Product> _products = new List<Product>();
         private int _nextId = 1;
         public void AddProduct(string name, decimal price, int quantity, Category category)
         {
             var product = new Product(name, price, quantity, category);
             product.GetType().GetProperty("Id")?.SetValue(product, _nextId++.ToString());
             _products.Add(product);
+        }
+        public bool RemoveProduct(string id)
+        {
+            var product = _products.FirstOrDefault(p => p.Id == id);
+            if (product == null) return false;
+            _products.Remove(product);
+            return true;
+        }
+
+        public void SupplyProduct(string id, int amount)
+        {
+            var product = _products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+                throw new ArgumentException("Товар не найден.");
+            product.IncreaseQuantity(amount);
+        }
+
+        public void SellProduct(string id, int amount)
+        {
+            var product = _products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+                throw new ArgumentException("Товар не найден.");
+            product.DecreaseQuantity(amount);
+        }
+        public Product FindByCode(string id)
+        {
+            return _products.FirstOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable FindByName(string name)
+        {
+            return _products.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public IEnumerable FindByCategory(Category category)
+        {
+            return _products.Where(p => p.Category == category);
         }
     }
 }
