@@ -124,6 +124,17 @@ namespace ShopInventory
                 Console.WriteLine("5. Поиск товара");
                 Console.WriteLine("6. Выход");
                 Console.Write("Выберите действие: ");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": AddProduct(manager); break;
+                    case "2": RemoveProduct(manager); break;
+                    case "3": SupplyProduct(manager); break;
+                    case "4": SellProduct(manager); break;
+                    case "5": SearchProduct(manager); break;
+                    case "6": return;
+                    default: Console.WriteLine("Неверная команда."); break;
+                }
             }
         }
         static void AddProduct(ProductManager manager)
