@@ -126,6 +126,102 @@ namespace ShopInventory
                 Console.Write("Выберите действие: ");
             }
         }
+        static void AddProduct(ProductManager manager)
+        {
+            try
+            {
+                Console.Write("Название: ");
+                var name = Console.ReadLine();
+                Console.Write("Цена: ");
+                var price = decimal.Parse(Console.ReadLine());
+                Console.Write("Количество: ");
+                var quantity = int.Parse(Console.ReadLine());
+                Console.Write("Категория (0-Электроника, 1-Одежда, 2-Продукты): ");
+                var category = (Category)int.Parse(Console.ReadLine());
+
+                manager.AddProduct(name, price, quantity, category);
+                Console.WriteLine("Товар добавлен.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+        static void RemoveProduct(ProductManager manager)
+        {
+            Console.Write("Код товара: ");
+            var id = Console.ReadLine();
+            if (manager.RemoveProduct(id))
+                Console.WriteLine("Товар удален.");
+            else
+                Console.WriteLine("Товар не найден.");
+        }
+
+        static void SupplyProduct(ProductManager manager)
+        {
+            try
+            {
+                Console.Write("Код товара: ");
+                var id = Console.ReadLine();
+                Console.Write("Количество: ");
+                var amount = int.Parse(Console.ReadLine());
+                manager.SupplyProduct(id, amount);
+                Console.WriteLine("Поставка выполнена.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        static void SellProduct(ProductManager manager)
+        {
+            try
+            {
+                Console.Write("Код товара: ");
+                var id = Console.ReadLine();
+                Console.Write("Количество: ");
+                var amount = int.Parse(Console.ReadLine());
+                manager.SellProduct(id, amount);
+                Console.WriteLine("Продажа выполнена.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        static void SearchProduct(ProductManager manager)
+        {
+            Console.WriteLine("1. По коду");
+            Console.WriteLine("2. По названию");
+            Console.WriteLine("3. По категории");
+            Console.Write("Выберите тип поиска: ");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Console.Write("Код: ");
+                    var product = manager.FindByCode(Console.ReadLine());
+                    Console.WriteLine(product != null ? product.ToString() : "Товар не найден.");
+                    break;
+                case "2":
+                    Console.Write("Название: ");
+                    foreach (var p in manager.FindByName(Console.ReadLine()))
+                        Console.WriteLine(p);
+                    break;
+                case "3":
+                    Console.Write("Категория (0-Электроника, 1-Одежда, 2-Продукты): ");
+                    var category = (Category)int.Parse(Console.ReadLine());
+                    foreach (var p in manager.FindByCategory(category))
+                        Console.WriteLine(p);
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор.");
+                    break;
+            }
+        }
     }
-    }
+}
+    
 
