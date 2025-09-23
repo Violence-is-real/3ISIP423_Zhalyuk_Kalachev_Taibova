@@ -5,12 +5,13 @@ using System.Linq;
 
 namespace ShopInventory
 {
-   public enum Category
+    public enum Category
     {
         Электроника,
         Одежда,
         Продукты
     }
+
     public class Product
     {
         public string Id { get; }
@@ -19,8 +20,12 @@ namespace ShopInventory
         public int Quantity { get; private set; }
         public bool IsAvailable => Quantity > 0;
         public Category Category { get; }
-        public Product(string name, decimal price, int quantity, Category category)
+
+        // Конструктор с ID
+        public Product(string id, string name, decimal price, int quantity, Category category)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("ID не может быть пустым.");
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Название не может быть пустым.");
             if (price <= 0)
@@ -28,17 +33,20 @@ namespace ShopInventory
             if (quantity < 0)
                 throw new ArgumentException("Количество не может быть отрицательным.");
 
+            Id = id;
             Name = name;
             Price = price;
             Quantity = quantity;
             Category = category;
         }
+
         public void IncreaseQuantity(int amount)
         {
             if (amount <= 0)
                 throw new ArgumentException("Количество должно быть положительным.");
             Quantity += amount;
         }
+
         public void DecreaseQuantity(int amount)
         {
             if (amount <= 0)
@@ -47,20 +55,26 @@ namespace ShopInventory
                 throw new InvalidOperationException("Недостаточно товара на складе.");
             Quantity -= amount;
         }
+
         public override string ToString()
         {
             return $"Код: {Id} | Название: {Name} | Цена: {Price:C} | Количество: {Quantity} | Наличие: {(IsAvailable ? "Да" : "Нет")} | Категория: {Category}";
         }
     }
+
     public class ProductManager
     {
-        private List<Product> _products = new List<Product>();
+        private List<Product>_products  = new List<Product>();
         private int _nextId = 1;
+
         public void AddProduct(string name, decimal price, int quantity, Category category)
         {
-            var product = new Product(name, price, quantity, category);
+            // Генерация ID начинающегося с "1"
+            string id = _nextId++.ToString();
+            var product = new Product(id, name, price, quantity, category);
             _products.Add(product);
         }
+
         public bool RemoveProduct(string id)
         {
             var product = _products.FirstOrDefault(p => p.Id == id);
@@ -84,6 +98,7 @@ namespace ShopInventory
                 throw new ArgumentException("Товар не найден.");
             product.DecreaseQuantity(amount);
         }
+
         public Product FindByCode(string id)
         {
             return _products.FirstOrDefault(p => p.Id == id);
@@ -98,6 +113,7 @@ namespace ShopInventory
         {
             return _products.Where(p => p.Category == category);
         }
+
         public void AddTestData()
         {
             AddProduct("Ноутбук", 50000, 10, Category.Электроника);
@@ -107,6 +123,7 @@ namespace ShopInventory
             AddProduct("Джинсы", 2500, 40, Category.Одежда);
         }
     }
+
     class Program
     {
         static void Main(string[] args)
@@ -136,6 +153,7 @@ namespace ShopInventory
                 }
             }
         }
+
         static void AddProduct(ProductManager manager)
         {
             try
@@ -157,6 +175,7 @@ namespace ShopInventory
                 Console.WriteLine($"Ошибка: {ex.Message}");
             }
         }
+
         static void RemoveProduct(ProductManager manager)
         {
             Console.Write("Код товара: ");
@@ -233,5 +252,3 @@ namespace ShopInventory
         }
     }
 }
-    
-
