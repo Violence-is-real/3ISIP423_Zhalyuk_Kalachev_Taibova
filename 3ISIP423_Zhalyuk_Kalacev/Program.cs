@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Collections.Generic;
 
 class TextStatistics
 {
@@ -273,6 +274,28 @@ class Program
         stats.VowelCount = vowelCount;
         stats.ConsonantCount = consonantCount;
     }
+    static Dictionary<char, int> CalculateLetterFrequency(string text)
+    {
+        Dictionary<char, int> frequency = new Dictionary<char, int>();
+
+        foreach (char c in text.ToLower())
+        {
+            if (char.IsLetter(c))
+            {
+                if (frequency.ContainsKey(c))
+                {
+                    frequency[c]++;
+                }
+                else
+                {
+                    frequency[c] = 1;
+                }
+            }
+        }
+
+        return frequency;
+    }
+
 }
 
 
