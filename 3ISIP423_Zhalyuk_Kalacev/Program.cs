@@ -85,4 +85,30 @@ namespace LibraryApp
             books.GroupBy(b => b.Author)
                 .Select(g => (g.Key, g.Count()));
     }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var library = new Library();
+            library.AddTestData();
+
+            while (true)
+            {
+                Console.WriteLine("\nКоманды:\n1-Добавить\n2-Удалить\n3-Найти\n4-Сортировать\n5-Ценовой диапазон\n6-Статистика авторов\n7-Выход");
+                Console.Write("Введите команду: ");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": AddBook(library); break;
+                    case "2": RemoveBook(library); break;
+                    case "3": FindBooks(library); break;
+                    case "4": SortBooks(library); break;
+                    case "5": ShowPriceRange(library); break;
+                    case "6": ShowAuthorStats(library); break;
+                    case "7": return;
+                    default: Console.WriteLine("Неизвестная команда"); break;
+                }
+            }
+        }
+    }
     }
