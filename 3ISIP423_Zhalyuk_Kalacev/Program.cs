@@ -253,7 +253,26 @@ class Program
 
         return count;
     }
+    static void CountVowelsAndConsonants(string text, TextStatistics stats)
+    {
+        int vowelCount = 0;
+        int consonantCount = 0;
 
+        foreach (char c in text.ToLower())
+        {
+            if (vowels.Contains(c))
+            {
+                vowelCount++;
+            }
+            else if (consonants.Contains(c))
+            {
+                consonantCount++;
+            }
+        }
+
+        stats.VowelCount = vowelCount;
+        stats.ConsonantCount = consonantCount;
+    }
 }
 
 
