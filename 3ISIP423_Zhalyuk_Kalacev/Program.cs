@@ -28,7 +28,11 @@ class Program
 'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
 'a', 'e', 'i', 'o', 'u', 'y'
 };
-
+    private static HashSet<string> conjunctions = new HashSet<string>
+{
+"и", "а", "но", "да", "или", "либо", "что", "чтобы", "как", "когда",
+"пока", "если", "хотя", "потому", "поэтому", "зато", "не", "ни"
+};
 
     private static HashSet<char> consonants = new HashSet<char>
 {
