@@ -162,6 +162,19 @@ class Program
 
         return count;
     }
+    static string CleanWord(string word)
+    {
+        // Удаляем знаки препинания с начала и конца слова
+        int start = 0;
+        int end = word.Length - 1;
+
+        while (start <= end && char.IsPunctuation(word[start])) start++;
+        while (end >= start && char.IsPunctuation(word[end])) end--;
+
+        if (start > end) return string.Empty;
+
+        return word.Substring(start, end - start + 1);
+    }
 }
 
 
