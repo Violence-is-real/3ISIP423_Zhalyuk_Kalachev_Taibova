@@ -28,4 +28,29 @@ namespace LibraryApp
             Id = nextId++;
         }
     }
-}
+    public class Library
+    {
+        private List<Book> books = new List<Book>();
+
+        public void AddBook(string title, string author, Genre genre, int year, decimal price)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentException("Название не может быть пустым");
+            if (string.IsNullOrWhiteSpace(author))
+                throw new ArgumentException("Автор не может быть пустым");
+            if (year < 1000 || year > DateTime.Now.Year)
+                throw new ArgumentException("Некорректный год издания");
+            if (price < 0)
+                throw new ArgumentException("Цена не может быть отрицательной");
+
+            books.Add(new Book
+            {
+                Title = title,
+                Author = author,
+                Genre = genre,
+                Year = year,
+                Price = price
+            });
+        }
+    }
+    }
