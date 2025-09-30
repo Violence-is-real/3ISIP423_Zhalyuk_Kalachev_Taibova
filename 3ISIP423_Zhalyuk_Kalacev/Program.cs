@@ -110,5 +110,103 @@ namespace LibraryApp
                 }
             }
         }
+        static void AddBook(Library library)
+        {
+            try
+            {
+                Console.Write("Название: ");
+                var title = Console.ReadLine();
+                Console.Write("Автор: ");
+                var author = Console.ReadLine();
+                Console.Write("Жанр (0-Fantasy, 1-SciFi, 2-Mystery, 3-Romance, 4-Horror): ");
+                var genre = (Genre)Enum.Parse(typeof(Genre), Console.ReadLine());
+                Console.Write("Год: ");
+                var year = int.Parse(Console.ReadLine());
+                Console.Write("Цена: ");
+                var price = decimal.Parse(Console.ReadLine());
+
+                library.AddBook(title, author, genre, year, price);
+                Console.WriteLine("Книга добавлена");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+        static void RemoveBook(Library library)
+        {
+            Console.Write("ID книги: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                if (library.RemoveBook(id)) Console.WriteLine("Книга удалена");
+                else Console.WriteLine("Книга не найдена");
+            }
+            else Console.WriteLine("Некорректный ID");
+        }
+
+        static void FindBooks(Library library)
+        {
+            Console.Write("Поиск по (1-названию, 2-автору, 3-жанру): ");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Console.Write("Название: ");
+                    DisplayBooks(library.FindByTitle(Console.ReadLine()));
+                    break;
+                case "2":
+                    Console.Write("Автор: ");
+                    DisplayBooks(library.FindByAuthor(Console.ReadLine()));
+                    break;
+                case "3":
+                    Console.Write("Жанр (0-4): ");
+                    var genre = (Genre)int.Parse(Console.ReadLine());
+                    DisplayBooks(library.FindByGenre(genre));
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор");
+                    break;
+            }
+        }
+
+        static void SortBooks(Library library)
+        {
+            Console.Write("Сортировать по (1-названию, 2-году): ");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    DisplayBooks(library.SortByTitle());
+                    break;
+                case "2":
+                    DisplayBooks(library.SortByYear());
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор");
+                    break;
+            }
+        }
+
+        static void ShowPriceRange(Library library)
+        {
+            var (min, max) = library.GetPriceRange();
+            if (min == null || max == null)
+            {
+                Console.WriteLine("Нет книг в библиотеке");
+                return;
+            }
+            Console.WriteLine($"Самая дешёвая: {min.Title} ({min.Price} руб.)");
+            Console.WriteLine($"Самая дорогая: {max.Title} ({max.Price} руб.)");
+        }
+
+        static void ShowAuthorStats(Library library)
+        {
+            foreach (var (author, count) in library.GetAuthorCounts())
+                Console.WriteLine($"{author}: {count} книг(и)");
+        }
+
+        static void DisplayBooks(IEnumerable<Book> books)
+        {
+            foreach (var b in books)
+                Console.WriteLine($"ID: {b.Id}, {b.Title} - {b.Author} ({b.Genre}), {b.Year} г., {b.Price} руб.");
+        }
     }
-    }
+}
