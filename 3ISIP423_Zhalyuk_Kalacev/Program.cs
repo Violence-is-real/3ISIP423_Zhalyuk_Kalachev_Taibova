@@ -66,6 +66,32 @@ class Program
             }
         }
     }
+    static void AnalyzeNewText()
+    {
+        string text = GetTextFromUser();
+        if (string.IsNullOrEmpty(text)) return;
+
+        // Создаем объект для статистики
+        TextStatistics stats = new TextStatistics
+        {
+            Text = text,
+            ProcessedAt = DateTime.Now
+        };
+
+        // Вычисляем базовую статистику
+        CalculateBasicStatistics(stats);
+
+        // Показываем результаты
+        ShowStatistics(stats, "БАЗОВАЯ СТАТИСТИКА");
+
+        // Предлагаем удалить буквы и пересчитать
+        ProcessLetterRemoval(stats);
+
+        // Сохраняем статистику
+        allStatistics.Add(stats);
+
+        Console.WriteLine("\nСтатистика сохранена!");
+    }
 }
 
 
