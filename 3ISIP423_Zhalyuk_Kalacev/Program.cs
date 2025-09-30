@@ -133,6 +133,35 @@ class Program
         // Статистика по буквам
         stats.LetterFrequency = CalculateLetterFrequency(text);
     }
+    static string[] SplitTextIntoWords(string text)
+    {
+        // Разделители для слов: пробелы, знаки препинания
+        char[] separators = { ' ', ',', '.', '!', '?', ';', ':', '"', '(', ')', '[', ']', '{', '}', '\t', '\n', '\r' };
+        return text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    static int CountWordsWithoutConjunctionsAndNumbers(string[] words)
+    {
+        int count = 0;
+
+        foreach (string word in words)
+        {
+            string cleanWord = CleanWord(word);
+
+            // Пропускаем пустые слова
+            if (string.IsNullOrEmpty(cleanWord)) continue;
+
+            // Пропускаем союзы
+            if (conjunctions.Contains(cleanWord.ToLower())) continue;
+
+            // Пропускаем числа
+            if (IsNumber(cleanWord)) continue;
+
+            count++;
+        }
+
+        return count;
+    }
 }
 
 
