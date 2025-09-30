@@ -295,7 +295,32 @@ class Program
 
         return frequency;
     }
+    static void ProcessLetterRemoval(TextStatistics originalStats)
+    {
+        Console.Write("\nХотите удалить определенные буквы из текста? (y/n): ");
+        string response = Console.ReadLine()?.ToLower();
 
-}
+        if (response != "y" && response != "yes" && response != "да") return;
+
+        Console.Write("Введите буквы для удаления (без пробелов): ");
+        string lettersToRemove = Console.ReadLine()?.ToLower();
+
+        if (string.IsNullOrEmpty(lettersToRemove))
+        {
+            Console.WriteLine("Не введены буквы для удаления.");
+            return;
+        }
+
+        // Удаляем буквы из текста
+        string modifiedText = RemoveLetters(originalStats.Text, lettersToRemove);
+
+        // Создаем новую статистику для модифицированного текста
+        TextStatistics modifiedStats = new TextStatistics
+        {
+            Text = modifiedText,
+            ProcessedAt = DateTime.Now
+        };
+
+    }
 
 
