@@ -175,6 +175,34 @@ class Program
 
         return word.Substring(start, end - start + 1);
     }
+    static bool IsNumber(string word)
+    {
+        
+        if (string.IsNullOrEmpty(word)) return false;
+
+        bool hasDigit = false;
+        bool hasDecimalSeparator = false;
+
+        foreach (char c in word)
+        {
+            if (char.IsDigit(c))
+            {
+                hasDigit = true;
+            }
+            else if (c == '.' || c == ',')
+            {
+                if (hasDecimalSeparator) return false;
+                hasDecimalSeparator = true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return hasDigit;
+    }
+
 }
 
 
