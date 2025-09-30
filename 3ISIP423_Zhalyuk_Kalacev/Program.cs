@@ -59,5 +59,19 @@ namespace LibraryApp
             books.Remove(book);
             return true;
         }
+        public IEnumerable<Book> FindByTitle(string title) =>
+            books.Where(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+
+        public IEnumerable<Book> FindByAuthor(string author) =>
+            books.Where(b => b.Author.Contains(author, StringComparison.OrdinalIgnoreCase));
+
+        public IEnumerable<Book> FindByGenre(Genre genre) =>
+            books.Where(b => b.Genre == genre);
+
+        public IEnumerable<Book> SortByTitle() =>
+            books.OrderBy(b => b.Title);
+
+        public IEnumerable<Book> SortByYear() =>
+            books.OrderBy(b => b.Year);
     }
     }
