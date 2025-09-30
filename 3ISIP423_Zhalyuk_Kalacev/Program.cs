@@ -321,6 +321,30 @@ class Program
             ProcessedAt = DateTime.Now
         };
 
+        // Пересчитываем статистику
+        CalculateBasicStatistics(modifiedStats);
+
+        // Показываем результаты
+        ShowStatistics(modifiedStats, $"СТАТИСТИКА ПОСЛЕ УДАЛЕНИЯ БУКВ: {lettersToRemove}");
+
+        // Сохраняем модифицированную статистику
+        allStatistics.Add(modifiedStats);
     }
+    static string RemoveLetters(string text, string lettersToRemove)
+    {
+        StringBuilder result = new StringBuilder();
+
+        foreach (char c in text)
+        {
+            char lowerC = char.ToLower(c);
+            if (!lettersToRemove.Contains(lowerC.ToString()))
+            {
+                result.Append(c);
+            }
+        }
+
+        return result.ToString();
+    }
+}
 
 
