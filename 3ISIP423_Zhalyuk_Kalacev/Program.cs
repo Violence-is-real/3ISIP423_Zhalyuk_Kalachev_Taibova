@@ -1,416 +1,259 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 class TextStatistics
 {
-    public string Text { get; set; }
     public int WordCount { get; set; }
     public string ShortestWord { get; set; }
     public int SentenceCount { get; set; }
+    public int ParagraphCount { get; set; }
     public int VowelCount { get; set; }
     public int ConsonantCount { get; set; }
     public string LongestWord { get; set; }
     public Dictionary<char, int> LetterFrequency { get; set; }
-    public DateTime ProcessedAt { get; set; }
+
+    public TextStatistics()
+    {
+        LetterFrequency = new Dictionary<char, int>();
+        ShortestWord = "";
+        LongestWord = "";
+    }
 }
 
 class Program
 {
-    // Список для хранения статистики по всем текстам
     private static List<TextStatistics> allStatistics = new List<TextStatistics>();
-
-    // Множества гласных и согласных букв (русский и английский алфавиты)
-    private static HashSet<char> vowels = new HashSet<char>
-{
-'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я',
-'a', 'e', 'i', 'o', 'u', 'y'
-};
-    private static HashSet<string> conjunctions = new HashSet<string>
-{
-"и", "а", "но", "да", "или", "либо", "что", "чтобы", "как", "когда",
-"пока", "если", "хотя", "потому", "поэтому", "зато", "не", "ни"
-};
-
-    private static HashSet<char> consonants = new HashSet<char>
-{
-'б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ',
-'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'
-};
 
     static void Main(string[] args)
     {
-        Console.OutputEncoding = Encoding.UTF8;
-        Console.InputEncoding = Encoding.UTF8;
+        Console.WriteLine("Программа для анализа текста");
+        Console.WriteLine("Нажмите любую клавишу для начала...");
+        Console.ReadKey();
 
         while (true)
         {
-            Console.WriteLine("\nАнализатор текста");
-            Console.WriteLine("1. Анализ нового текста");
-            Console.WriteLine("2. Просмотр статистики по прошлым текстам");
-            Console.WriteLine("3. Выход");
-            Console.Write("Выберите действие: ");
+            Console.Clear();
+            Console.WriteLine("Введите текст (не менее 100 символов):");
+            Console.WriteLine("(Для завершения ввода нажмите Enter дважды подряд)");
 
-            string choice = Console.ReadLine();
+            // Многострочный ввод текста
+            StringBuilder textBuilder = new StringBuilder();
+            string line;
+            int emptyLineCount = 0;
 
-            switch (choice)
+            while (true)
             {
-                case "1":
-                    AnalyzeNewText();
-                    break;
-                case "2":
-                    ShowPastStatistics();
-                    break;
-                case "3":
-                    Console.WriteLine("До свидания!");
-                    return;
-                default:
-                    Console.WriteLine("Неверный выбор!");
-                    break;
+                line = Console.ReadLine();
+
+                // Проверка на двойное нажатие Enter (пустая строка)
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    emptyLineCount++;
+                    if (emptyLineCount >= 2 || textBuilder.Length > 0)
+                        break;
+                    else
+                        continue;
+                }
+                else
+                {
+                    emptyLineCount = 0;
+                    textBuilder.AppendLine(line);
+                }
             }
-        }
-    }
-    static void AnalyzeNewText()
-    {
-        string text = GetTextFromUser();
-        if (string.IsNullOrEmpty(text)) return;
 
-        // Создаем объект для статистики
-        TextStatistics stats = new TextStatistics
-        {
-            Text = text,
-            ProcessedAt = DateTime.Now
-        };
+            string text = textBuilder.ToString().Trim();
 
-        // Вычисляем базовую статистику
-        CalculateBasicStatistics(stats);
-
-        // Показываем результаты
-        ShowStatistics(stats, "БАЗОВАЯ СТАТИСТИКА");
-
-        // Предлагаем удалить буквы и пересчитать
-        ProcessLetterRemoval(stats);
-
-        // Сохраняем статистику
-        allStatistics.Add(stats);
-
-        Console.WriteLine("\nСтатистика сохранена!");
-    }
-    static string GetTextFromUser()
-    {
-        string text;
-        while (true)
-        {
-            Console.WriteLine("\nВведите текст (минимум 100 символов):");
-            Console.WriteLine("(для выхода введите 'exit')");
-            text = Console.ReadLine();
-
-            if (text?.ToLower() == "exit") return null;
-
-            if (string.IsNullOrEmpty(text) || text.Length < 100)
+            if (text.Length < 100)
             {
-                Console.WriteLine($"Текст должен содержать минимум 100 символов! Сейчас: {text?.Length ?? 0}");
+                Console.WriteLine($"Текст должен содержать минимум 100 символов. Сейчас: {text.Length}. Нажмите любую клавишу для продолжения...");
+                Console.ReadKey();
                 continue;
             }
 
-            break;
+            TextStatistics stats = AnalyzeText(text);
+            allStatistics.Add(stats);
+
+            Console.Clear();
+            DisplayStatistics(stats);
+
+            Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+            Console.ReadKey();
+
+            Console.Clear();
+            Console.WriteLine("Хотите ввести новый текст? (да/нет)");
+            string response = Console.ReadLine().ToLower();
+
+            if (response != "да" && response != "д" && response != "yes" && response != "y")
+                break;
         }
-        return text;
+
+        DisplayAllStatistics();
+
+        Console.WriteLine("\nНажмите любую клавишу для выхода...");
+        Console.ReadKey();
     }
-    static void CalculateBasicStatistics(TextStatistics stats)
+
+    static TextStatistics AnalyzeText(string text)
     {
-        string text = stats.Text;
+        TextStatistics stats = new TextStatistics();
 
-        // Подсчет слов (без учета союзов и чисел)
-        string[] words = SplitTextIntoWords(text);
-        stats.WordCount = CountWordsWithoutConjunctionsAndNumbers(words);
+        // Подсчет абзацев (разделяются пустыми строками)
+        string[] paragraphs = text.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.RemoveEmptyEntries);
+        stats.ParagraphCount = paragraphs.Length;
 
-        // Поиск самого короткого и длинного слова
-        FindShortestAndLongestWords(words, stats);
+        // Подсчет слов и поиск самого короткого/длинного слова
+        string[] words = SplitIntoWords(text);
+        stats.WordCount = words.Length;
+        if (words.Length > 0)
+        {
+            stats.ShortestWord = words[0];
+            stats.LongestWord = words[0];
+            foreach (string word in words)
+            {
+                if (word.Length < stats.ShortestWord.Length)
+                    stats.ShortestWord = word;
+                if (word.Length > stats.LongestWord.Length)
+                    stats.LongestWord = word;
+            }
+        }
 
         // Подсчет предложений
-        stats.SentenceCount = CountSentences(text);
-
-        // Подсчет гласных и согласных
-        CountVowelsAndConsonants(text, stats);
-
-        // Статистика по буквам
-        stats.LetterFrequency = CalculateLetterFrequency(text);
-    }
-    static string[] SplitTextIntoWords(string text)
-    {
-        // Разделители для слов: пробелы, знаки препинания
-        char[] separators = { ' ', ',', '.', '!', '?', ';', ':', '"', '(', ')', '[', ']', '{', '}', '\t', '\n', '\r' };
-        return text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-    }
-
-    static int CountWordsWithoutConjunctionsAndNumbers(string[] words)
-    {
-        int count = 0;
-
-        foreach (string word in words)
-        {
-            string cleanWord = CleanWord(word);
-
-            // Пропускаем пустые слова
-            if (string.IsNullOrEmpty(cleanWord)) continue;
-
-            // Пропускаем союзы
-            if (conjunctions.Contains(cleanWord.ToLower())) continue;
-
-            // Пропускаем числа
-            if (IsNumber(cleanWord)) continue;
-
-            count++;
-        }
-
-        return count;
-    }
-    static string CleanWord(string word)
-    {
-        // Удаляем знаки препинания с начала и конца слова
-        int start = 0;
-        int end = word.Length - 1;
-
-        while (start <= end && char.IsPunctuation(word[start])) start++;
-        while (end >= start && char.IsPunctuation(word[end])) end--;
-
-        if (start > end) return string.Empty;
-
-        return word.Substring(start, end - start + 1);
-    }
-    static bool IsNumber(string word)
-    {
-        
-        if (string.IsNullOrEmpty(word)) return false;
-
-        bool hasDigit = false;
-        bool hasDecimalSeparator = false;
-
-        foreach (char c in word)
-        {
-            if (char.IsDigit(c))
-            {
-                hasDigit = true;
-            }
-            else if (c == '.' || c == ',')
-            {
-                if (hasDecimalSeparator) return false;
-                hasDecimalSeparator = true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return hasDigit;
-    }
-    static void FindShortestAndLongestWords(string[] words, TextStatistics stats)
-    {
-        string shortest = null;
-        string longest = null;
-
-        foreach (string word in words)
-        {
-            string cleanWord = CleanWord(word);
-
-            // Пропускаем пустые слова, союзы и числа
-            if (string.IsNullOrEmpty(cleanWord)) continue;
-            if (conjunctions.Contains(cleanWord.ToLower())) continue;
-            if (IsNumber(cleanWord)) continue;
-
-            if (shortest == null || cleanWord.Length < shortest.Length)
-            {
-                shortest = cleanWord;
-            }
-
-            if (longest == null || cleanWord.Length > longest.Length)
-            {
-                longest = cleanWord;
-            }
-        }
-
-        stats.ShortestWord = shortest ?? "не найдено";
-        stats.LongestWord = longest ?? "не найдено";
-    }
-    static int CountSentences(string text)
-    {
-        int count = 0;
+        char[] sentenceSeparators = { '.', '!', '?', ';' };
+        int sentenceCount = 0;
         bool inSentence = false;
 
         foreach (char c in text)
         {
-            if (char.IsLetterOrDigit(c))
+            if (char.IsLetter(c) || char.IsDigit(c))
             {
                 if (!inSentence)
                 {
-                    count++;
                     inSentence = true;
                 }
             }
-            else if (c == '.' || c == '!' || c == '?' || c == '\n')
+            else if (Array.Exists(sentenceSeparators, sep => sep == c) && inSentence)
             {
+                sentenceCount++;
                 inSentence = false;
             }
         }
 
-        return count;
-    }
-    static void CountVowelsAndConsonants(string text, TextStatistics stats)
-    {
-        int vowelCount = 0;
-        int consonantCount = 0;
-
-        foreach (char c in text.ToLower())
+        // Учет последнего предложения, если текст не заканчивается разделителем
+        if (inSentence)
         {
-            if (vowels.Contains(c))
-            {
-                vowelCount++;
-            }
-            else if (consonants.Contains(c))
-            {
-                consonantCount++;
-            }
+            sentenceCount++;
         }
 
-        stats.VowelCount = vowelCount;
-        stats.ConsonantCount = consonantCount;
-    }
-    static Dictionary<char, int> CalculateLetterFrequency(string text)
-    {
-        Dictionary<char, int> frequency = new Dictionary<char, int>();
+        stats.SentenceCount = sentenceCount;
+
+        // Подсчет гласных и согласных
+        string vowels = "аеёиоуыэюяaeiou";
+        string consonants = "бвгджзйклмнпрстфхцчшщbcdfghjklmnpqrstvwxyz";
 
         foreach (char c in text.ToLower())
         {
             if (char.IsLetter(c))
             {
-                if (frequency.ContainsKey(c))
-                {
-                    frequency[c]++;
-                }
-                else
-                {
-                    frequency[c] = 1;
-                }
+                if (vowels.Contains(c.ToString()))
+                    stats.VowelCount++;
+                else if (consonants.Contains(c.ToString()))
+                    stats.ConsonantCount++;
             }
         }
 
-        return frequency;
-    }
-    static void ProcessLetterRemoval(TextStatistics originalStats)
-    {
-        Console.Write("\nХотите удалить определенные буквы из текста? (y/n): ");
-        string response = Console.ReadLine()?.ToLower();
-
-        if (response != "y" && response != "yes" && response != "да") return;
-
-        Console.Write("Введите буквы для удаления (без пробелов): ");
-        string lettersToRemove = Console.ReadLine()?.ToLower();
-
-        if (string.IsNullOrEmpty(lettersToRemove))
+        // Статистика частоты букв
+        foreach (char c in text.ToLower())
         {
-            Console.WriteLine("Не введены буквы для удаления.");
-            return;
+            if (char.IsLetter(c))
+            {
+                if (stats.LetterFrequency.ContainsKey(c))
+                    stats.LetterFrequency[c]++;
+                else
+                    stats.LetterFrequency[c] = 1;
+            }
         }
 
-        // Удаляем буквы из текста
-        string modifiedText = RemoveLetters(originalStats.Text, lettersToRemove);
-
-        // Создаем новую статистику для модифицированного текста
-        TextStatistics modifiedStats = new TextStatistics
-        {
-            Text = modifiedText,
-            ProcessedAt = DateTime.Now
-        };
-
-        // Пересчитываем статистику
-        CalculateBasicStatistics(modifiedStats);
-
-        // Показываем результаты
-        ShowStatistics(modifiedStats, $"СТАТИСТИКА ПОСЛЕ УДАЛЕНИЯ БУКВ: {lettersToRemove}");
-
-        // Сохраняем модифицированную статистику
-        allStatistics.Add(modifiedStats);
+        return stats;
     }
-    static string RemoveLetters(string text, string lettersToRemove)
+
+    static string[] SplitIntoWords(string text)
     {
-        StringBuilder result = new StringBuilder();
+        List<string> words = new List<string>();
+        StringBuilder currentWord = new StringBuilder();
 
         foreach (char c in text)
         {
-            char lowerC = char.ToLower(c);
-            if (!lettersToRemove.Contains(lowerC.ToString()))
+            if (char.IsLetter(c) || c == '\'' || c == '-')
             {
-                result.Append(c);
+                currentWord.Append(c);
+            }
+            else if (currentWord.Length > 0)
+            {
+                words.Add(currentWord.ToString());
+                currentWord.Clear();
             }
         }
 
-        return result.ToString();
+        if (currentWord.Length > 0)
+        {
+            words.Add(currentWord.ToString());
+        }
+
+        return words.ToArray();
     }
-    static void ShowStatistics(TextStatistics stats, string title)
+
+    static void DisplayStatistics(TextStatistics stats)
     {
-        Console.WriteLine($"\n=== {title} ===");
-        Console.WriteLine($"Текст: {stats.Text.Substring(0, Math.Min(100, stats.Text.Length))}...");
-        Console.WriteLine($"Обработан: {stats.ProcessedAt}");
-        Console.WriteLine($"Количество слов (без союзов и чисел): {stats.WordCount}");
+        Console.WriteLine("=== Статистика текста ===");
+        Console.WriteLine($"Количество абзацев: {stats.ParagraphCount}");
+        Console.WriteLine($"Количество слов: {stats.WordCount}");
         Console.WriteLine($"Самое короткое слово: {stats.ShortestWord}");
         Console.WriteLine($"Самое длинное слово: {stats.LongestWord}");
         Console.WriteLine($"Количество предложений: {stats.SentenceCount}");
-        Console.WriteLine($"Гласных букв: {stats.VowelCount}");
-        Console.WriteLine($"Согласных букв: {stats.ConsonantCount}");
+        Console.WriteLine($"Гласные буквы: {stats.VowelCount}");
+        Console.WriteLine($"Согласные буквы: {stats.ConsonantCount}");
 
-        Console.WriteLine("Частота встречаемости букв:");
-        foreach (var pair in stats.LetterFrequency)
+        Console.WriteLine("\nЧастота букв:");
+        // Сортировка букв по частоте (по убыванию)
+        var sortedLetters = new List<KeyValuePair<char, int>>(stats.LetterFrequency);
+        for (int i = 0; i < sortedLetters.Count - 1; i++)
         {
-            Console.WriteLine($" {pair.Key}: {pair.Value}");
+            for (int j = i + 1; j < sortedLetters.Count; j++)
+            {
+                if (sortedLetters[i].Value < sortedLetters[j].Value)
+                {
+                    var temp = sortedLetters[i];
+                    sortedLetters[i] = sortedLetters[j];
+                    sortedLetters[j] = temp;
+                }
+            }
+        }
+
+        foreach (var entry in sortedLetters)
+        {
+            Console.WriteLine($"{entry.Key}: {entry.Value}");
         }
     }
 
-    static void ShowPastStatistics()
+    static void DisplayAllStatistics()
     {
         if (allStatistics.Count == 0)
         {
-            Console.WriteLine("Статистика по прошлым текстам отсутствует.");
+            Console.WriteLine("Нет данных для отображения.");
             return;
         }
 
-        Console.WriteLine($"\n=== СТАТИСТИКА ПО ПРОШЛЫМ ТЕКСТАМ (всего: {allStatistics.Count}) ===");
-
+        Console.WriteLine("=== Статистика по всем текстам ===");
         for (int i = 0; i < allStatistics.Count; i++)
         {
-            Console.WriteLine($"\n--- Текст #{i + 1} ---");
-            Console.WriteLine($"Обработан: {allStatistics[i].ProcessedAt}");
-            Console.WriteLine($"Количество слов: {allStatistics[i].WordCount}");
-            Console.WriteLine($"Предложений: {allStatistics[i].SentenceCount}");
-            Console.WriteLine($"Гласных/согласных: {allStatistics[i].VowelCount}/{allStatistics[i].ConsonantCount}");
-
-            if (allStatistics[i].LetterFrequency.Count > 0)
-            {
-                var firstLetter = allStatistics[i].LetterFrequency.Keys.GetEnumerator().Current;
-                Console.WriteLine($"Букв в частотном анализе: {allStatistics[i].LetterFrequency.Count}");
-            }
-        }
-
-        Console.Write("\nПоказать детальную статистику для конкретного текста? (y/n): ");
-        string response = Console.ReadLine()?.ToLower();
-
-        if (response == "y" || response == "yes" || response == "да")
-        {
-            Console.Write($"Введите номер текста (1-{allStatistics.Count}): ");
-            if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= allStatistics.Count)
-            {
-                ShowStatistics(allStatistics[index - 1], $"ДЕТАЛЬНАЯ СТАТИСТИКА ТЕКСТА #{index}");
-            }
-            else
-            {
-                Console.WriteLine("Неверный номер текста.");
-            }
+            Console.WriteLine($"\nТекст #{i + 1}:");
+            Console.WriteLine($"- Абзацев: {allStatistics[i].ParagraphCount}");
+            Console.WriteLine($"- Слов: {allStatistics[i].WordCount}");
+            Console.WriteLine($"- Предложений: {allStatistics[i].SentenceCount}");
+            Console.WriteLine($"- Гласные/Согласные: {allStatistics[i].VowelCount}/{allStatistics[i].ConsonantCount}");
+            Console.WriteLine($"- Самое короткое слово: {allStatistics[i].ShortestWord}");
+            Console.WriteLine($"- Самое длинное слово: {allStatistics[i].LongestWord}");
         }
     }
 }
-
-
-
