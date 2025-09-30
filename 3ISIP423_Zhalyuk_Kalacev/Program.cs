@@ -73,5 +73,16 @@ namespace LibraryApp
 
         public IEnumerable<Book> SortByYear() =>
             books.OrderBy(b => b.Year);
+        public (Book? min, Book? max) GetPriceRange()
+        {
+            if (!books.Any()) return (null, null);
+            var min = books.OrderBy(b => b.Price).First();
+            var max = books.OrderByDescending(b => b.Price).First();
+            return (min, max);
+        }
+
+        public IEnumerable<(string Author, int Count)> GetAuthorCounts() =>
+            books.GroupBy(b => b.Author)
+                .Select(g => (g.Key, g.Count()));
     }
     }
