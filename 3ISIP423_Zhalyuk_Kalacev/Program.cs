@@ -113,6 +113,26 @@ class Program
         }
         return text;
     }
+    static void CalculateBasicStatistics(TextStatistics stats)
+    {
+        string text = stats.Text;
+
+        // Подсчет слов (без учета союзов и чисел)
+        string[] words = SplitTextIntoWords(text);
+        stats.WordCount = CountWordsWithoutConjunctionsAndNumbers(words);
+
+        // Поиск самого короткого и длинного слова
+        FindShortestAndLongestWords(words, stats);
+
+        // Подсчет предложений
+        stats.SentenceCount = CountSentences(text);
+
+        // Подсчет гласных и согласных
+        CountVowelsAndConsonants(text, stats);
+
+        // Статистика по буквам
+        stats.LetterFrequency = CalculateLetterFrequency(text);
+    }
 }
 
 
