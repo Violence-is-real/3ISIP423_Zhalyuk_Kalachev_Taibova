@@ -29,6 +29,7 @@ class Program
 'a', 'e', 'i', 'o', 'u', 'y'
 };
 
+
     private static HashSet<char> consonants = new HashSet<char>
 {
 'б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ',
@@ -345,6 +346,67 @@ class Program
 
         return result.ToString();
     }
+    static void ShowStatistics(TextStatistics stats, string title)
+    {
+        Console.WriteLine($"\n=== {title} ===");
+        Console.WriteLine($"Текст: {stats.Text.Substring(0, Math.Min(100, stats.Text.Length))}...");
+        Console.WriteLine($"Обработан: {stats.ProcessedAt}");
+        Console.WriteLine($"Количество слов (без союзов и чисел): {stats.WordCount}");
+        Console.WriteLine($"Самое короткое слово: {stats.ShortestWord}");
+        Console.WriteLine($"Самое длинное слово: {stats.LongestWord}");
+        Console.WriteLine($"Количество предложений: {stats.SentenceCount}");
+        Console.WriteLine($"Гласных букв: {stats.VowelCount}");
+        Console.WriteLine($"Согласных букв: {stats.ConsonantCount}");
+
+        Console.WriteLine("Частота встречаемости букв:");
+        foreach (var pair in stats.LetterFrequency)
+        {
+            Console.WriteLine($" {pair.Key}: {pair.Value}");
+        }
+    }
+
+    static void ShowPastStatistics()
+    {
+        if (allStatistics.Count == 0)
+        {
+            Console.WriteLine("Статистика по прошлым текстам отсутствует.");
+            return;
+        }
+
+        Console.WriteLine($"\n=== СТАТИСТИКА ПО ПРОШЛЫМ ТЕКСТАМ (всего: {allStatistics.Count}) ===");
+
+        for (int i = 0; i < allStatistics.Count; i++)
+        {
+            Console.WriteLine($"\n--- Текст #{i + 1} ---");
+            Console.WriteLine($"Обработан: {allStatistics[i].ProcessedAt}");
+            Console.WriteLine($"Количество слов: {allStatistics[i].WordCount}");
+            Console.WriteLine($"Предложений: {allStatistics[i].SentenceCount}");
+            Console.WriteLine($"Гласных/согласных: {allStatistics[i].VowelCount}/{allStatistics[i].ConsonantCount}");
+
+            if (allStatistics[i].LetterFrequency.Count > 0)
+            {
+                var firstLetter = allStatistics[i].LetterFrequency.Keys.GetEnumerator().Current;
+                Console.WriteLine($"Букв в частотном анализе: {allStatistics[i].LetterFrequency.Count}");
+            }
+        }
+
+        Console.Write("\nПоказать детальную статистику для конкретного текста? (y/n): ");
+        string response = Console.ReadLine()?.ToLower();
+
+        if (response == "y" || response == "yes" || response == "да")
+        {
+            Console.Write($"Введите номер текста (1-{allStatistics.Count}): ");
+            if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= allStatistics.Count)
+            {
+                ShowStatistics(allStatistics[index - 1], $"ДЕТАЛЬНАЯ СТАТИСТИКА ТЕКСТА #{index}");
+            }
+            else
+            {
+                Console.WriteLine("Неверный номер текста.");
+            }
+        }
+    }
 }
+
 
 
