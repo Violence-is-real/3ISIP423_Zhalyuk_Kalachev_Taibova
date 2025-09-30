@@ -202,7 +202,34 @@ class Program
 
         return hasDigit;
     }
+    static void FindShortestAndLongestWords(string[] words, TextStatistics stats)
+    {
+        string shortest = null;
+        string longest = null;
 
+        foreach (string word in words)
+        {
+            string cleanWord = CleanWord(word);
+
+            // Пропускаем пустые слова, союзы и числа
+            if (string.IsNullOrEmpty(cleanWord)) continue;
+            if (conjunctions.Contains(cleanWord.ToLower())) continue;
+            if (IsNumber(cleanWord)) continue;
+
+            if (shortest == null || cleanWord.Length < shortest.Length)
+            {
+                shortest = cleanWord;
+            }
+
+            if (longest == null || cleanWord.Length > longest.Length)
+            {
+                longest = cleanWord;
+            }
+        }
+
+        stats.ShortestWord = shortest ?? "не найдено";
+        stats.LongestWord = longest ?? "не найдено";
+    }
 }
 
 
