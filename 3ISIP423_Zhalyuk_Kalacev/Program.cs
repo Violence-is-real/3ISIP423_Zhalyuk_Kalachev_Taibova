@@ -92,6 +92,27 @@ class Program
 
         Console.WriteLine("\nСтатистика сохранена!");
     }
+    static string GetTextFromUser()
+    {
+        string text;
+        while (true)
+        {
+            Console.WriteLine("\nВведите текст (минимум 100 символов):");
+            Console.WriteLine("(для выхода введите 'exit')");
+            text = Console.ReadLine();
+
+            if (text?.ToLower() == "exit") return null;
+
+            if (string.IsNullOrEmpty(text) || text.Length < 100)
+            {
+                Console.WriteLine($"Текст должен содержать минимум 100 символов! Сейчас: {text?.Length ?? 0}");
+                continue;
+            }
+
+            break;
+        }
+        return text;
+    }
 }
 
 
