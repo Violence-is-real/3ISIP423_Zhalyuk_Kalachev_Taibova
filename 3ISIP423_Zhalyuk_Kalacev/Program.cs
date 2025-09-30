@@ -230,6 +230,30 @@ class Program
         stats.ShortestWord = shortest ?? "не найдено";
         stats.LongestWord = longest ?? "не найдено";
     }
+    static int CountSentences(string text)
+    {
+        int count = 0;
+        bool inSentence = false;
+
+        foreach (char c in text)
+        {
+            if (char.IsLetterOrDigit(c))
+            {
+                if (!inSentence)
+                {
+                    count++;
+                    inSentence = true;
+                }
+            }
+            else if (c == '.' || c == '!' || c == '?' || c == '\n')
+            {
+                inSentence = false;
+            }
+        }
+
+        return count;
+    }
+
 }
 
 
