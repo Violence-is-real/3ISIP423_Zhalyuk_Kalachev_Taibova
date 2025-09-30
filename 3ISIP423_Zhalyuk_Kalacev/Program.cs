@@ -84,6 +84,14 @@ namespace LibraryApp
         public IEnumerable<(string Author, int Count)> GetAuthorCounts() =>
             books.GroupBy(b => b.Author)
                 .Select(g => (g.Key, g.Count()));
+        public void AddTestData()
+        {
+            AddBook("Властелин Колец", "Толкин", Genre.Fantasy, 1954, 1500);
+            AddBook("1984", "Оруэлл", Genre.ScienceFiction, 1949, 800);
+            AddBook("Убийство в Восточном экспрессе", "Кристи", Genre.Mystery, 1934, 700);
+            AddBook("Дюна", "Герберт", Genre.ScienceFiction, 1965, 950);
+            AddBook("Оно", "Кинг", Genre.Horror, 1986, 1200);
+        }
     }
     class Program
     {
