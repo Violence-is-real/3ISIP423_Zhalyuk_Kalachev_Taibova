@@ -52,5 +52,12 @@ namespace LibraryApp
                 Price = price
             });
         }
+        public bool RemoveBook(int id)
+        {
+            var book = books.FirstOrDefault(b => b.Id == id);
+            if (book == null) return false;
+            books.Remove(book);
+            return true;
+        }
     }
     }
