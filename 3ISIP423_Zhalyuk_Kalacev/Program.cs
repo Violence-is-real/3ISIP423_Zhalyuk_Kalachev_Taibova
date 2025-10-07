@@ -18,3 +18,18 @@ public abstract class Person
 
     public abstract string GetInfo();
 }
+public class Course
+{
+    public int Id { get; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    private Teacher _teacher;
+    private List<Student> _students = new List<Student>();
+
+    public Course(int id, string name, string description)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+    }
+}
