@@ -33,3 +33,50 @@ public class Course
         Description = description;
     }
 }
+public class Student : Person
+{
+    private List<Course> _courses = new List<Course>();
+
+    public Student(int id, string name, int age, string email)
+        : base(id, name, age, email) { }
+
+    public IReadOnlyList<Course> Courses => _courses.AsReadOnly();
+
+    public void EnrollInCourse(Course course)
+    {
+        if (!_courses.Contains(course))
+        {
+            _courses.Add(course);
+            course.AddStudent(this);
+        }
+    }
+
+    public override string GetInfo()
+    {
+        return $"Студент: {Name} (ID: {Id}), Возраст: {Age}, Email: {Email}";
+    }
+}
+
+public class Teacher : Person
+{
+    private List<Course> _courses = new List<Course>();
+
+    public Teacher(int id, string name, int age, string email)
+        : base(id, name, age, email) { }
+
+    public IReadOnlyList<Course> Courses => _courses.AsReadOnly();
+
+    public void AssignToCourse(Course course)
+    {
+        if (!_courses.Contains(course))
+        {
+            _courses.Add(course);
+            course.AssignTeacher(this);
+        }
+    }
+
+    public override string GetInfo()
+    {
+        return $"Преподаватель: {Name} (ID: {Id}), Возраст: {Age}, Email: {Email}";
+    }
+}
