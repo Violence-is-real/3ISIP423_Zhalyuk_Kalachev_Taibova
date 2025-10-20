@@ -224,6 +224,20 @@ class Program
                 }
             }
         }
+        static void EnemyEncounter()
+        {
+            var enemy = enemies[random.Next(enemies.Count)];
+            Console.WriteLine($"На вас напал {enemy.Name}!");
+            Combat(enemy);
+        }
+
+        static void BossFight()
+        {
+            var boss = bosses[random.Next(bosses.Count)];
+            Console.WriteLine($"!!! ПОЯВИЛСЯ БОСС {boss.Name} !!!");
+            Combat(boss);
+        }
+
 
     }
 }
