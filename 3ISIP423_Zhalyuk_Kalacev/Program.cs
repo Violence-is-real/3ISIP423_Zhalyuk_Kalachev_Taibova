@@ -83,3 +83,62 @@ public class Player
         HP = MaxHP;
     }
 }
+class Program
+{
+    private static Player player;
+    private static Random random;
+    private static int turnCount;
+
+    private static List<Enemy> enemies;
+    private static List<Enemy> bosses;
+    private static List<Weapon> weapons;
+    private static List<Armor> armors;
+
+    static void Main(string[] args)
+    {
+        InitializeGame();
+        StartGame();
+    }
+
+    static void InitializeGame()
+    {
+        player = new Player();
+        random = new Random();
+        turnCount = 0;
+
+        // Создаем обычных врагов
+        enemies = new List<Enemy>
+            {
+                new Enemy("Гоблин", 30, 8, 3, critChance: 0.2),
+                new Enemy("Скелет", 25, 10, 2, ignoreDefense: true),
+                new Enemy("Маг", 20, 12, 1, freezeChance: 0.15)
+            };
+
+        // Создаем боссов
+        bosses = new List<Enemy>
+            {
+                new Enemy("ВВГ", 60, 12, 4, critChance: 0.3),
+                new Enemy("Ковальский", 63, 13, 3, ignoreDefense: true),
+                new Enemy("Архимаг C++", 36, 19, 1, freezeChance: 0.25),
+                new Enemy("Пестов С--", 33, 18, 1, freezeChance: 0.3, ignoreDefense: true)
+            };
+
+        // Создаем оружие
+        weapons = new List<Weapon>
+            {
+                new Weapon("Ржавый меч", 10),
+                new Weapon("Острый кинжал", 15),
+                new Weapon("Боевой топор", 20),
+                new Weapon("Легендарный клинок", 30)
+            };
+
+        // Создаем броню
+        armors = new List<Armor>
+            {
+                new Armor("Кожаная броня", 5),
+                new Armor("Кольчуга", 10),
+                new Armor("Латные доспехи", 15),
+                new Armor("Драконья чешуя", 25)
+            };
+    }
+}
