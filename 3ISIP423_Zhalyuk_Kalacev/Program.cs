@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TextRoguelike;
 
 namespace TextRoguelike
 {
@@ -17,4 +18,13 @@ namespace TextRoguelike
             Defense = defense;
         }
     }
+}
+public class Weapon : Item
+{
+    public Weapon(string name, int attack) : base(name, attack, 0) { }
+}
+
+public class Armor : Item
+{
+    public Armor(string name, int defense) : base(name, 0, defense) { }
 }
