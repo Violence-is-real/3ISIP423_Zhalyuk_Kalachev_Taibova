@@ -140,5 +140,90 @@ class Program
                 new Armor("Латные доспехи", 15),
                 new Armor("Драконья чешуя", 25)
             };
+        static void StartGame()
+        {
+            Console.WriteLine("Добро пожаловать в текстовый рогалик!");
+            Console.WriteLine("Управление: вводите цифры для выбора действий");
+
+            while (player.IsAlive())
+            {
+                ProcessTurn();
+            }
+
+            Console.WriteLine("\nИгра окончена. Нажмите любую клавишу для выхода...");
+            Console.ReadKey();
+        }
+
+        static void ProcessTurn()
+        {
+            turnCount++;
+            Console.WriteLine($"\n=== Ход {turnCount} ===");
+
+            if (player.IsFrozen)
+            {
+                Console.WriteLine("Вы заморожены и пропускаете ход!");
+                player.IsFrozen = false;
+                return;
+            }
+
+            if (turnCount % 10 == 0)
+            {
+                BossFight();
+            }
+            else
+            {
+                if (random.NextDouble() < 0.5)
+                {
+                    EnemyEncounter();
+                }
+                else
+                {
+                    ChestEncounter();
+                }
+            }
+        }
+        static void StartGame()
+        {
+            Console.WriteLine("Добро пожаловать в текстовый рогалик!");
+            Console.WriteLine("Управление: вводите цифры для выбора действий");
+
+            while (player.IsAlive())
+            {
+                ProcessTurn();
+            }
+
+            Console.WriteLine("\nИгра окончена. Нажмите любую клавишу для выхода...");
+            Console.ReadKey();
+        }
+
+        static void ProcessTurn()
+        {
+            turnCount++;
+            Console.WriteLine($"\n=== Ход {turnCount} ===");
+
+            if (player.IsFrozen)
+            {
+                Console.WriteLine("Вы заморожены и пропускаете ход!");
+                player.IsFrozen = false;
+                return;
+            }
+
+            if (turnCount % 10 == 0)
+            {
+                BossFight();
+            }
+            else
+            {
+                if (random.NextDouble() < 0.5)
+                {
+                    EnemyEncounter();
+                }
+                else
+                {
+                    ChestEncounter();
+                }
+            }
+        }
+
     }
 }
