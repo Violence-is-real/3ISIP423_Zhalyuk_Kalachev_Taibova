@@ -54,3 +54,32 @@ public class Enemy
 
     public bool IsAlive() => HP > 0;
 }
+public class Player
+{
+    public int MaxHP { get; set; } = 100;
+    public int HP { get; set; } = 100;
+    public Weapon Weapon { get; set; }
+    public Armor Armor { get; set; }
+    public bool IsFrozen { get; set; }
+
+    public Player()
+    {
+        Weapon = new Weapon("Кулаки", 5);
+        Armor = new Armor("Кожаные кофты", 2);
+    }
+
+    public bool IsAlive() => HP > 0;
+
+    public int GetAttack() => Weapon.Attack;
+    public int GetDefense() => Armor.Defense;
+
+    public void TakeDamage(int damage)
+    {
+        HP = Math.Max(0, HP - damage);
+    }
+
+    public void Heal()
+    {
+        HP = MaxHP;
+    }
+}
