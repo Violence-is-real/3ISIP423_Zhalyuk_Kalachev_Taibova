@@ -278,8 +278,56 @@ namespace TextRoguelike
                 Console.WriteLine("\nВы погибли...");
             }
         }
+        static void ChestEncounter()
+        {
+            Console.WriteLine("Вы нашли сундук!");
+            var itemType = random.Next(3); // 0: heal, 1: weapon, 2: armor
 
-       
+            if (itemType == 0)
+            {
+                Console.WriteLine("Внутри лечебное зелье! Ваше здоровье полностью восстановлено.");
+                player.Heal();
+            }
+            else
+            {
+                Item newItem;
+                Item currentItem;
+
+                if (itemType == 1)
+                {
+                    newItem = weapons[random.Next(weapons.Count)];
+                    currentItem = player.Weapon;
+                }
+                else
+                {
+                    newItem = armors[random.Next(armors.Count)];
+                    currentItem = player.Armor;
+                }
+
+                Console.WriteLine($"Внутри {newItem.Name} (Атака: {newItem.Attack}, Защита: {newItem.Defense})");
+                Console.WriteLine($"Ваш текущий предмет: {currentItem.Name} (Атака: {currentItem.Attack}, Защита: {currentItem.Defense})");
+
+                Console.Write("Хотите взять предмет? [1] Взять [2] Выбросить\n> ");
+                var choice = Console.ReadLine();
+
+                if (choice == "1")
+                {
+                    if (itemType == 1)
+                    {
+                        player.Weapon = (Weapon)newItem;
+                    }
+                    else
+                    {
+                        player.Armor = (Armor)newItem;
+                    }
+                    Console.WriteLine("Вы экипировали новый предмет!");
+                }
+                else
+                {
+                    Console.WriteLine("Вы выбросили предмет.");
+                }
+            }
+
         }
     }
 }
