@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище avtoservis423Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Zapch" Type="int" />
+          <Property Name="Value" Type="money" />
+        </EntityType>
+        <EntityType Name="Magazin">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Zapch" Type="int" />
+          <Property Name="Value" Type="money" />
+        </EntityType>
+        <EntityType Name="Money">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Count" Type="money" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Tovar" Type="int" />
+          <Property Name="Count" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="zapch">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Car_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="Zapch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Magazin_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Magazin" Type="Self.Magazin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Magazin">
+              <PropertyRef Name="Zapch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="Tovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище avtoservis423ModelContainer">
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Magazin" EntityType="Self.Magazin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Money" EntityType="Self.Money" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zapch" EntityType="Self.zapch" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Car_zapch" Association="Self.FK_Car_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Magazin_zapch" Association="Self.FK_Magazin_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Magazin" EntitySet="Magazin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_zapch" Association="Self.FK_Sklad_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="avtoservis423Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Zapch" Type="Int32" />
+          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="zapch1" Relationship="Self.FK_Car_zapch" FromRole="Car" ToRole="zapch" />
+        </EntityType>
+        <EntityType Name="Magazin">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Zapch" Type="Int32" />
+          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="zapch1" Relationship="Self.FK_Magazin_zapch" FromRole="Magazin" ToRole="zapch" />
+        </EntityType>
+        <EntityType Name="Money">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Count" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Tovar" Type="Int32" />
+          <Property Name="Count" Type="Int32" />
+          <NavigationProperty Name="zapch" Relationship="Self.FK_Sklad_zapch" FromRole="Sklad" ToRole="zapch" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="zapch">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Car_zapch" FromRole="zapch" ToRole="Car" />
+          <NavigationProperty Name="Magazin" Relationship="Self.FK_Magazin_zapch" FromRole="zapch" ToRole="Magazin" />
+          <NavigationProperty Name="Sklad" Relationship="Self.FK_Sklad_zapch" FromRole="zapch" ToRole="Sklad" />
+        </EntityType>
+        <Association Name="FK_Car_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="Zapch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Magazin_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Magazin" Type="Self.Magazin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Magazin">
+              <PropertyRef Name="Zapch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_zapch">
+          <End Role="zapch" Type="Self.zapch" Multiplicity="0..1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zapch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="Tovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="avtoservis423Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Car" EntityType="Self.Car" />
+          <EntitySet Name="Magazin" EntityType="Self.Magazin" />
+          <EntitySet Name="Money" EntityType="Self.Money" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="zapch" EntityType="Self.zapch" />
+          <AssociationSet Name="FK_Car_zapch" Association="Self.FK_Car_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Magazin_zapch" Association="Self.FK_Magazin_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Magazin" EntitySet="Magazin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_zapch" Association="Self.FK_Sklad_zapch">
+            <End Role="zapch" EntitySet="zapch" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище avtoservis423ModelContainer" CdmEntityContainer="avtoservis423Entities">
+          <EntitySetMapping Name="Car">
+            <EntityTypeMapping TypeName="avtoservis423Model.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Zapch" ColumnName="Zapch" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Magazin">
+            <EntityTypeMapping TypeName="avtoservis423Model.Magazin">
+              <MappingFragment StoreEntitySet="Magazin">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Zapch" ColumnName="Zapch" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Money">
+            <EntityTypeMapping TypeName="avtoservis423Model.Money">
+              <MappingFragment StoreEntitySet="Money">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sklad">
+            <EntityTypeMapping TypeName="avtoservis423Model.Sklad">
+              <MappingFragment StoreEntitySet="Sklad">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tovar" ColumnName="Tovar" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="avtoservis423Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zapch">
+            <EntityTypeMapping TypeName="avtoservis423Model.zapch">
+              <MappingFragment StoreEntitySet="zapch">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
