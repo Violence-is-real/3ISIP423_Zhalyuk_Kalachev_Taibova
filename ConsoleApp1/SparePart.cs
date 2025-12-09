@@ -12,12 +12,18 @@ namespace ConsoleApp1
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class SparePart
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public SparePart()
+        {
+            this.Client = new HashSet<Client>();
+        }
+    
+        public int SparePart_ID { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+        public int Stock { get; set; }
+    
+        public virtual ICollection<Client> Client { get; set; }
     }
 }
