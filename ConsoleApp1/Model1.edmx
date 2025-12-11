@@ -4,69 +4,69 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище magazModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище magazModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CartItems">
           <Key>
-            <PropertyRef Name="CarItemID" />
+            <PropertyRef Name="CartItemID" />
           </Key>
-          <Property Name="CarItemID" Type="int" Nullable="false" />
-          <Property Name="CartID" Type="int" />
-          <Property Name="ProductID" Type="int" />
-          <Property Name="Quantity" Type="int" />
+          <Property Name="CartItemID" Type="int" Nullable="false" />
+          <Property Name="CartID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Carts">
           <Key>
             <PropertyRef Name="CartID" />
           </Key>
           <Property Name="CartID" Type="int" Nullable="false" />
-          <Property Name="UserID" Type="int" />
-          <Property Name="CreatedAt" Type="date" />
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="CategoryID" />
           </Key>
-          <Property Name="CategoryID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="OrderItems">
           <Key>
             <PropertyRef Name="OrderItemID" />
           </Key>
           <Property Name="OrderItemID" Type="int" Nullable="false" />
-          <Property Name="OrderID" Type="int" />
-          <Property Name="ProductID" Type="int" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="UnitPrice" Type="float" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="OrderID" />
           </Key>
           <Property Name="OrderID" Type="int" Nullable="false" />
-          <Property Name="UserID" Type="int" />
-          <Property Name="PickupPointID" Type="int" />
-          <Property Name="OrderDate" Type="date" />
-          <Property Name="TotalAmount" Type="float" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="PickupPointID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="PickupPoints">
           <Key>
             <PropertyRef Name="PickupPointID" />
           </Key>
-          <Property Name="PickupPointID" Type="int" Nullable="false" />
-          <Property Name="Address" Type="nvarchar(max)" />
-          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="PickupPointID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="Price" Type="float" />
-          <Property Name="StockQuantity" Type="int" />
-          <Property Name="CategoryID" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -82,13 +82,13 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="Login" Type="nvarchar(max)" />
-          <Property Name="Password" Type="nvarchar(max)" />
-          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <Association Name="FK_CartItems_Carts">
-          <End Role="Carts" Type="Self.Carts" Multiplicity="0..1" />
+          <End Role="Carts" Type="Self.Carts" Multiplicity="1" />
           <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Carts">
@@ -100,7 +100,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CartItems_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -112,7 +112,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Carts_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -124,7 +124,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrderItems_Orders">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Orders">
@@ -136,7 +136,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_PickupPoints">
-          <End Role="PickupPoints" Type="Self.PickupPoints" Multiplicity="0..1" />
+          <End Role="PickupPoints" Type="Self.PickupPoints" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PickupPoints">
@@ -148,7 +148,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -160,7 +160,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Products_Categories">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -171,37 +171,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Хранилище magazModelContainer">
           <EntitySet Name="CartItems" EntityType="Self.CartItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
@@ -248,12 +217,12 @@
       <Schema Namespace="magazModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="CartItems">
           <Key>
-            <PropertyRef Name="CarItemID" />
+            <PropertyRef Name="CartItemID" />
           </Key>
-          <Property Name="CarItemID" Type="Int32" Nullable="false" />
-          <Property Name="CartID" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
-          <Property Name="Quantity" Type="Int32" />
+          <Property Name="CartItemID" Type="Int32" Nullable="false" />
+          <Property Name="CartID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Carts" Relationship="Self.FK_CartItems_Carts" FromRole="CartItems" ToRole="Carts" />
           <NavigationProperty Name="Products" Relationship="Self.FK_CartItems_Products" FromRole="CartItems" ToRole="Products" />
         </EntityType>
@@ -262,8 +231,8 @@
             <PropertyRef Name="CartID" />
           </Key>
           <Property Name="CartID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="CreatedAt" Type="DateTime" Precision="0" />
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Carts" FromRole="Carts" ToRole="CartItems" />
           <NavigationProperty Name="Users" Relationship="Self.FK_Carts_Users" FromRole="Carts" ToRole="Users" />
         </EntityType>
@@ -271,8 +240,8 @@
           <Key>
             <PropertyRef Name="CategoryID" />
           </Key>
-          <Property Name="CategoryID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
         </EntityType>
         <EntityType Name="OrderItems">
@@ -280,10 +249,10 @@
             <PropertyRef Name="OrderItemID" />
           </Key>
           <Property Name="OrderItemID" Type="Int32" Nullable="false" />
-          <Property Name="OrderID" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Orders">
@@ -291,10 +260,10 @@
             <PropertyRef Name="OrderID" />
           </Key>
           <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="PickupPointID" Type="Int32" />
-          <Property Name="OrderDate" Type="DateTime" Precision="0" />
-          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="PickupPointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
           <NavigationProperty Name="PickupPoints" Relationship="Self.FK_Orders_PickupPoints" FromRole="Orders" ToRole="PickupPoints" />
           <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
@@ -303,21 +272,21 @@
           <Key>
             <PropertyRef Name="PickupPointID" />
           </Key>
-          <Property Name="PickupPointID" Type="Int32" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PickupPointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_PickupPoints" FromRole="PickupPoints" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="StockQuantity" Type="Int32" />
-          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Products" FromRole="Products" ToRole="CartItems" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
         </EntityType>
@@ -335,15 +304,15 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Login" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Carts" Relationship="Self.FK_Carts_Users" FromRole="Users" ToRole="Carts" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
         </EntityType>
         <Association Name="FK_CartItems_Carts">
-          <End Role="Carts" Type="Self.Carts" Multiplicity="0..1" />
+          <End Role="Carts" Type="Self.Carts" Multiplicity="1" />
           <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Carts">
@@ -355,7 +324,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CartItems_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -367,7 +336,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Carts_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -379,7 +348,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Products_Categories">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -391,7 +360,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrderItems_Orders">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Orders">
@@ -403,7 +372,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_PickupPoints">
-          <End Role="PickupPoints" Type="Self.PickupPoints" Multiplicity="0..1" />
+          <End Role="PickupPoints" Type="Self.PickupPoints" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PickupPoints">
@@ -415,7 +384,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -464,48 +433,7 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(magazModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(magazModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -515,7 +443,7 @@
           <EntitySetMapping Name="CartItems">
             <EntityTypeMapping TypeName="magazModel.CartItems">
               <MappingFragment StoreEntitySet="CartItems">
-                <ScalarProperty Name="CarItemID" ColumnName="CarItemID" />
+                <ScalarProperty Name="CartItemID" ColumnName="CartItemID" />
                 <ScalarProperty Name="CartID" ColumnName="CartID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
@@ -603,30 +531,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище magazModel.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище magazModel.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище magazModel.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="Хранилище magazModel.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="magazModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="Хранилище magazModel.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="magazModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище magazModel.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище magazModel.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -643,7 +547,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
       </DesignerInfoPropertySet>
     </Options>

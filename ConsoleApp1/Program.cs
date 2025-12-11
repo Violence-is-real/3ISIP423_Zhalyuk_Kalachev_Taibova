@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ConsoleApp1;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace ConsoleApp2
@@ -305,6 +307,7 @@ namespace ConsoleApp2
 
                 Core.Context.SaveChanges();
                 Console.WriteLine($"Товар '{product.Name}' добавлен в корзину!");
+                
             }
             catch (Exception ex)
             {
@@ -535,11 +538,15 @@ namespace ConsoleApp2
                         UnitPrice = cartItem.Products.Price
                     };
                     Core.Context.OrderItems.Add(orderItem);
-
+                   
                     cartItem.Products.StockQuantity -= cartItem.Quantity;
+                    
                 }
 
-                Core.Context.CartItems.RemoveRange(cartItems);
+                foreach (var cartItem in cartItems)
+                {
+                    Core.Context.CartItems.Remove(cartItem);
+                }
                 Core.Context.SaveChanges();
 
                 Console.WriteLine($"Заказ успешно оформлен!");
@@ -628,7 +635,7 @@ namespace ConsoleApp2
                 Console.WriteLine("Товары:");
                 foreach (var item in orderItems)
                 {
-                    Console.WriteLine($"  - {item.Products.Name} x {item.Quantity} по {item.UnitPrice} руб.");
+                    Console.WriteLine($"  - {item.ProductID} x {item.Quantity} по {item.UnitPrice} руб.");
                 }
                 Console.WriteLine("===================================");
             }
