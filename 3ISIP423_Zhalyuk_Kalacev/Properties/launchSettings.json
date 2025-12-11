@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "3ISIP423_Zhalyuk_Kalacev": {
+      "commandName": "Project"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}
